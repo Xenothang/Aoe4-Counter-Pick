@@ -23,6 +23,8 @@ Download the zip for your browser from the [Releases](../../releases) page.
 
 **Firefox** (temporary, until the add-on is signed/published): open `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on…* → pick `manifest.json` from the unzipped folder (or the zip itself). Temporary add-ons are removed when Firefox restarts.
 
+**!!!Please set the Website Language to English!!!**
+
 **Chrome / Edge / Brave / Opera / Vivaldi**: unzip the Chrome build, open `chrome://extensions` (or `edge://extensions`), enable *Developer mode* → *Load unpacked* → choose the unzipped folder.
 
 ### From source
