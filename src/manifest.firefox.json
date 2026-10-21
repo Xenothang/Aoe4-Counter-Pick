@@ -2,9 +2,9 @@
   "background": { "scripts": ["background.js"] },
   "browser_specific_settings": {
     "gecko": {
-      "id": "aoe4-counter-pick@users.noreply.github.com",
+      "id": "{5dad5888-bd66-4e23-bc8d-d1087c58681d}",
       "strict_min_version": "115.0",
-      "data_collection_permissions": { "required": ["none"] }
+      "data_collection_permissions": { "required": [ "none" ] }
     }
   }
 }
