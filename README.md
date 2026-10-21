@@ -5,6 +5,9 @@ While a draft is running it reads the picks of both captains and shows the best 
 
 > Unofficial fan project. Not affiliated with or endorsed by AoE2CM, AoE4World, Microsoft or World's Edge.
 
+<img width="1891" height="905" alt="grafik" src="https://github.com/user-attachments/assets/2a162094-6dc8-437a-9ab8-cfe123408a12" />
+
+
 ## Features
 
 - **Counter panels** – left: your best counters against the opponent's picks; right: the opponent's best counters against yours. With several picks, civs are ranked by their *worst* matchup (maximin), then by their average win rate.
