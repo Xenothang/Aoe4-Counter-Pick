@@ -33,8 +33,8 @@ Download the zip for your browser from the [Releases](../../releases) page.
 ### From source
 
 ```bash
-git clone https://github.com/<you>/aoe4-counter-pick.git
-cd aoe4-counter-pick
+git clone https://github.com/Xenothang/Aoe4-Counter-Pick.git
+cd Aoe4-Counter-Pick
 npm install
 npm run build          # → dist/firefox, dist/chrome and the two zips in dist/
 ```
