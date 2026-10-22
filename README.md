@@ -10,7 +10,7 @@ While a draft is running it reads the picks of both captains and shows the best 
 
 ## Features
 
-- **Counter panels** – left: your best counters against the opponent's picks; right: the opponent's best counters against yours. With several picks, civs are ranked by their *worst* matchup (maximin), then by their average win rate.
+- **Counter panels** – neutral, so it works for both captains and for spectators: left = the host's best counters against the guest's picks, right = the guest's best counters against the host's picks. With several picks, civs are ranked by their *worst* matchup (maximin), then by their average win rate.
 - **Civ flags** – click a flag to see the best counters against that single civ; click again to go back to all picks.
 - **Draft win-rate estimate** (top bar) – host vs. guest, the leading captain in green, the trailing one in red.
 - **Colour-coded win rates** – ≥ 52 % green, 48–52 % yellow, < 48 % red.
@@ -69,7 +69,6 @@ The version number lives in `package.json` only; the build writes it into both m
 
 ### Known limitations
 
-- The addon assumes you are the **host captain** (left side = guest/opponent). A host/guest switch is not implemented yet.
 - Sniped picks are not removed from the lists.
 - If the AoE4World stats page cannot be parsed, a built-in rank list is used; its API values have not been verified against the live API.
 
@@ -81,7 +80,7 @@ The version number lives in `package.json` only; the build writes it into both m
 
 ### Store submission (manual)
 
-- **Firefox Add-ons (AMO):** upload `aoe4-counter-pick-<version>-firefox.zip`. Change `browser_specific_settings.gecko.id` in `src/manifest.firefox.json` to an ID you own *before* the first submission – it cannot be changed later.
+- **Firefox Add-ons (AMO):** upload `aoe4-counter-pick-<version>-firefox.zip`. The add-on ID (`browser_specific_settings.gecko.id` in `src/manifest.firefox.json`) is fixed after the first submission – never change it, or Firefox treats the add-on as a different one.
 - **Chrome Web Store:** upload `aoe4-counter-pick-<version>-chrome.zip`. Edge Add-ons accepts the same zip.
 - Both stores ask for a privacy statement – see [PRIVACY.md](PRIVACY.md).
 

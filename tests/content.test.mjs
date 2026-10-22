@@ -32,19 +32,19 @@ test('reads host and guest picks separately (regression: both sides used to show
   const flagNames = id => p.$$(`#${id} .aoe4cp-flag`).map(b => b.querySelector('img')?.alt ?? b.textContent);
   assert.deepEqual(flagNames('aoe4cp-left-content'), ['Mongols', 'Order of the Dragon']);
   assert.deepEqual(flagNames('aoe4cp-right-content'), ['Knights Templar', 'Holy Roman Empire']);
-  assert.match(p.$('#aoe4cp-left-content .aoe4cp-selected').textContent, /Opponent picks:/);
-  assert.match(p.$('#aoe4cp-right-content .aoe4cp-selected').textContent, /Your picks:/);
+  assert.match(p.$('#aoe4cp-left-content .aoe4cp-selected').textContent, /Guest picks:/);
+  assert.match(p.$('#aoe4cp-right-content .aoe4cp-selected').textContent, /Host picks:/);
 });
 
-test('left panel does not wait once the opponent has picked, even if you picked as many', async () => {
+test('left panel does not wait once the guest has picked, even if you picked as many', async () => {
   const p = createPage(base); await settle();
   assert.doesNotMatch(p.$('#aoe4cp-left-content').textContent, /Waiting/);
   assert.ok(p.rows('aoe4cp-left-content').length > 0);
 });
 
-test('shows waiting text when the opponent has no pick yet', async () => {
+test('shows waiting text when the guest has no pick yet', async () => {
   const p = createPage({ ...base, guest: [] }); await settle();
-  assert.match(p.$('#aoe4cp-left-content').textContent, /Waiting for opponent picks/);
+  assert.match(p.$('#aoe4cp-left-content').textContent, /Waiting for guest picks/);
 });
 
 test('win rates are coloured: >=52 green, 48-52 yellow, <48 red; "min" label is gone', async () => {
@@ -136,4 +136,13 @@ test('civs missing from the built-in list are learned from the data', async () =
   const data = [rec('yue_fei_legacy', 'mongols', 58), rec('mongols', 'yue_fei_legacy', 42)];
   const p = createPage({ host: [], guest: ['Mongols'], data }); await settle();
   assert.deepEqual(p.rows('aoe4cp-left-content').map(r => r.name), ['Yue Fei Legacy']);
+});
+
+test('panels are neutral: host best counter on the left, guest best counter on the right', async () => {
+  const p = createPage({ ...base, data: [...DATA, rec('Mongols', 'Knights Templar', 49), rec('Rus', 'Knights Templar', 44)] }); await settle();
+  assert.equal(p.$('#aoe4cp-left .aoe4cp-side-title').textContent.replace(/\s+/g, ' ').trim().replace(/◀$/, '').trim(), 'Host best counter');
+  assert.equal(p.$('#aoe4cp-right .aoe4cp-side-title').textContent.replace(/\s+/g, ' ').trim().replace(/▶$/, '').trim(), 'Guest best counter');
+  assert.match(p.$('#aoe4cp-left .aoe4cp-side-subtitle').textContent, /guest picks/);
+  assert.match(p.$('#aoe4cp-right .aoe4cp-side-subtitle').textContent, /host picks/);
+  assert.doesNotMatch(p.document.body.parentElement.textContent, /\b[Yy]our\b|[Oo]pponent/);
 });

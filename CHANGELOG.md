@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.1
+- Neutral wording so the addon works for both captains and spectators: "Host best counter" (left, counters against the guest's picks) and "Guest best counter" (right, counters against the host's picks). No more "Your" / "Opponent".
+
 ## 0.5.0
 - Restructured into a proper repository: `src/`, build script, tests, CI.
 - Cross-browser: Firefox (MV3 event page) and Chromium browsers (MV3 service worker) from one code base.

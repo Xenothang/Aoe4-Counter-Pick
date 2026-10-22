@@ -215,13 +215,6 @@
     return records;
   }
 
-  function resolveOpponentRow(opponent) {
-    const target = civKey(opponent);
-    // Keep records where the candidate civ is the player civilization and the
-    // selected opponent is `other_civilization`. This is the direction we need.
-    return extractRecords(allMatchups).filter(r => civKey(r.against) === target);
-  }
-
   function createWinrateSummary() {
     if (document.getElementById('aoe4cp-winrate')) return;
     const el = document.createElement('div'); el.id = 'aoe4cp-winrate';
@@ -288,8 +281,8 @@
       <div class="aoe4cp-set-group"><label for="aoe4cp-set-patch">Patch</label><select id="aoe4cp-set-patch"></select></div>
       <div class="aoe4cp-set-group">
         <div class="aoe4cp-set-label">Visible elements</div>
-        <label class="aoe4cp-check"><input type="checkbox" data-el="left"> Left panel · your best counters</label>
-        <label class="aoe4cp-check"><input type="checkbox" data-el="right"> Right panel · opponent counter options</label>
+        <label class="aoe4cp-check"><input type="checkbox" data-el="left"> Left panel · host's best counters</label>
+        <label class="aoe4cp-check"><input type="checkbox" data-el="right"> Right panel · guest's best counters</label>
         <label class="aoe4cp-check"><input type="checkbox" data-el="top"> Top bar · draft win-rate</label>
       </div>
       <div id="aoe4cp-set-status" role="status"></div>
@@ -319,12 +312,12 @@
   function createSidebars() {
     if (!document.getElementById('aoe4cp-left')) {
       const left = document.createElement('aside'); left.id = 'aoe4cp-left';
-      left.innerHTML = '<div class="aoe4cp-side-title">Your best counter</div><div class="aoe4cp-side-subtitle">Counters against all opponent picks</div><div class="aoe4cp-side-content" id="aoe4cp-left-content">Waiting for opponent picks…</div>';
+      left.innerHTML = '<div class="aoe4cp-side-title">Host best counter</div><div class="aoe4cp-side-subtitle">Counters against all guest picks</div><div class="aoe4cp-side-content" id="aoe4cp-left-content">Waiting for guest picks…</div>';
       document.documentElement.appendChild(left);
     }
     if (!document.getElementById('aoe4cp-right')) {
       const right = document.createElement('aside'); right.id = 'aoe4cp-right';
-      right.innerHTML = '<div class="aoe4cp-side-title">Opponent counter options</div><div class="aoe4cp-side-subtitle">Best win rates against your picks</div><div class="aoe4cp-side-content" id="aoe4cp-right-content">Waiting for your picks…</div>';
+      right.innerHTML = '<div class="aoe4cp-side-title">Guest best counter</div><div class="aoe4cp-side-subtitle">Counters against all host picks</div><div class="aoe4cp-side-content" id="aoe4cp-right-content">Waiting for host picks…</div>';
       document.documentElement.appendChild(right);
     }
   }
@@ -473,7 +466,8 @@
 
     // Recommendations depend only on the picks that are actually shown in the draft.
     // The picks of both captains are visible at the same time, so the left panel is
-    // computed as soon as the opponent has at least one pick.
+    // computed as soon as the guest has at least one pick. Both panels are neutral: the left one
+    // shows the best counters for the host (against the guest's picks), the right one the guest's.
     const guestPicks = detectedGuestPicks;
     const hostPicks = detectedHostPicks;
     const leftContent = document.getElementById('aoe4cp-left-content');
@@ -481,17 +475,17 @@
     if (!leftContent || !rightContent) return;
 
     if (!guestPicks.length) {
-      leftContent.textContent = 'Waiting for opponent picks…';
+      leftContent.textContent = 'Waiting for guest picks…';
     } else {
-      renderCombinedPanel(leftContent, guestPicks, 'Opponent picks',
-        hostPicks.length > guestPicks.length ? `Opponent has ${guestPicks.length} pick(s) so far vs. your ${hostPicks.length}; this updates when more appear.` : '', 'left');
+      renderCombinedPanel(leftContent, guestPicks, 'Guest picks',
+        hostPicks.length > guestPicks.length ? `Guest has ${guestPicks.length} pick(s) so far vs. host's ${hostPicks.length}; this updates when more appear.` : '', 'left');
     }
 
     if (!hostPicks.length) {
-      rightContent.textContent = 'Waiting for your (Host Captain) picks…';
+      rightContent.textContent = 'Waiting for host picks…';
     } else {
-      renderCombinedPanel(rightContent, hostPicks, 'Your picks',
-        guestPicks.length > hostPicks.length ? `You have ${hostPicks.length} pick(s) so far vs. opponent's ${guestPicks.length}.` : '', 'right');
+      renderCombinedPanel(rightContent, hostPicks, 'Host picks',
+        guestPicks.length > hostPicks.length ? `Host has ${hostPicks.length} pick(s) so far vs. guest's ${guestPicks.length}; this updates when more appear.` : '', 'right');
     }
 
     // Draft win-rate estimate from Host Captain's perspective.
@@ -530,8 +524,8 @@
       }
     }
 
-    if (!guestPicks.length) setStatus('Matchup data ready. Waiting for draft picks.');
-    else setStatus(`Countering ${guestPicks.map(shownName).join(' + ')} · robust win-rate ranking`);
+    if (!guestPicks.length && !hostPicks.length) setStatus('Matchup data ready. Waiting for draft picks.');
+    else setStatus(`Host: ${hostPicks.length} pick(s) · Guest: ${guestPicks.length} pick(s)`);
   }
 
   // Read the picks of one captain straight from the AoE2CM draft DOM:
