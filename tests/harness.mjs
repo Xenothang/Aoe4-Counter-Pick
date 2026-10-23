@@ -9,14 +9,18 @@ export const sleep = ms => new Promise(r => setTimeout(r, ms));
 const pickPanel = name => `<div class="civ-panel pick has-value"><div class="box-content"><div class="stretchy-wrapper"><div class="stretchy-image civ-indicator"><img src="/img/${name.replace(/\W/g, '')}.png"></div><div class="stretchy-text">${name}</div></div></div></div>`;
 const emptyPanel = '<div class="civ-panel pick"><div class="stretchy-text"></div></div>';
 
+/** A filled turn panel as rendered by the AoE2CM draft view. action: pick | ban | steal. img: option image URL. */
+export const civFlag = name => `https://www.aoe2cm.net/images/aoe4/flag/aoe4.${name.replace(/\W/g, '')}.png`;
+export const turnPanel = (turn, name, action = 'pick', img = `/img/${name.replace(/\W/g, '')}.png`) => `<div id="panel-turn-${turn}" class="civ-panel ${action} is-inline-block has-value"><div class="box-content"><div class="stretchy-wrapper"><div class="stretchy-image civ-indicator"><img src="${img}"></div><div class="stretchy-text">${name}</div></div></div></div>`;
+
 export const rec = (civilization, other_civilization, win_rate, games_count = 300) => ({ civilization, other_civilization, win_rate, games_count });
 
 export const DEFAULT_STATS_HTML = `<select name="patch_id"><option value="any">All</option><option value="10604,10884" selected>16.2 (June 1st)</option><option value="9999">15.9 (old)</option></select>
 <select name="rank_level"><option value="≥conqueror">Conqueror+</option><option value="≥diamond">Diamond+</option><option value="bronze">Bronze</option></select>`;
 
 /** Builds a fake aoe2cm draft page, runs the content script in it and returns helpers. */
-export function createPage({ url = 'https://www.aoe2cm.net/draft/test', host = [], guest = [], data = [], statsHtml = DEFAULT_STATS_HTML, store = {} } = {}) {
-  const html = `<body><div id="player-host"><div class="picks">${host.map(pickPanel).join('')}${emptyPanel}</div></div><div id="player-guest"><div class="picks">${guest.map(pickPanel).join('')}</div></div></body>`;
+export function createPage({ url = 'https://www.aoe2cm.net/draft/test', host = [], guest = [], data = [], statsHtml = DEFAULT_STATS_HTML, store = {}, bodyHtml = null } = {}) {
+  const html = bodyHtml ?? `<body><div id="player-host"><div class="picks">${host.map(pickPanel).join('')}${emptyPanel}</div></div><div id="player-guest"><div class="picks">${guest.map(pickPanel).join('')}</div></div></body>`;
   const w = new JSDOM(html, { runScripts: 'outside-only', url }).window;
   const requests = [];
   w.browser = {

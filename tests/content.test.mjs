@@ -110,7 +110,7 @@ test('settings: elements can be disabled and the choice is stored', async () => 
   const cb = p.$('#aoe4cp-settings input[data-el="top"]'); cb.checked = false; p.fire(cb, 'change');
   assert.ok(p.htmlClasses().includes('aoe4cp-off-top'));
   assert.equal(p.store.aoe4cp_settings.show.top, false);
-  assert.equal(p.$$('#aoe4cp-settings input[data-el]').length, 3);
+  assert.equal(p.$$('#aoe4cp-settings input[data-el]').length, 5);
 });
 
 test('panels slide away with their arrow, come back with the edge tab, and the state is stored', async () => {

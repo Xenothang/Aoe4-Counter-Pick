@@ -147,3 +147,30 @@ html.aoe4cp-away-settings #aoe4cp-settings { transform: translateX(calc(100% + 2
 .aoe4cp-wr-neutral, .aoe4cp-side-row .aoe4cp-rate strong.aoe4cp-wr-neutral, #aoe4cp-winrate-body .aoe4cp-wr-neutral { color: #f5d37a; }
 .aoe4cp-wr-bad, .aoe4cp-side-row .aoe4cp-rate strong.aoe4cp-wr-bad, #aoe4cp-winrate-body .aoe4cp-wr-bad { color: #ff7b72; }
 #aoe4cp-winrate-body { color: #cbd3dd; }
+
+/* Map bar (picked map(s) of the draft), below the win-rate bar */
+#aoe4cp-map { position: fixed; z-index: 2147483000; top: 46px; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-width: min(680px, 62vw); padding: 5px 40px 5px 12px; box-sizing: border-box; color: #f7f7f7; background: #20242bf0; border: 1px solid #59616d; border-radius: 8px; font: 13px/1.35 system-ui, sans-serif; pointer-events: none; transition: transform .2s ease, visibility 0s; }
+#aoe4cp-map .aoe4cp-arrow { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
+.aoe4cp-map-label { color: #aeb8c5; text-transform: uppercase; font-size: 10px; letter-spacing: .06em; }
+.aoe4cp-map-list { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.aoe4cp-map-chip { padding: 1px 9px; background: #343b46; border: 1px solid #626d7c; border-radius: 999px; font-weight: 600; }
+.aoe4cp-map-chip b { margin-right: 6px; color: #f5d37a; }
+.aoe4cp-map-none { color: #8d98a7; font-style: italic; }
+html.aoe4cp-away-map #aoe4cp-map { transform: translate(-50%, calc(-100% - 60px)); visibility: hidden; pointer-events: none; transition: transform .2s ease, visibility 0s linear .2s; }
+#aoe4cp-tab-map { top: 0; left: calc(50% + 36px); width: 56px; height: 22px; border-top: 0; border-radius: 0 0 8px 8px; }
+html.aoe4cp-away-map #aoe4cp-tab-map { display: flex; }
+html.aoe4cp-off-map #aoe4cp-map, html.aoe4cp-off-map #aoe4cp-tab-map { display: none !important; }
+html.aoe4cp-ui-hidden #aoe4cp-map { display: none !important; }
+
+/* Civ pools in the side panels */
+.aoe4cp-pool { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 8px 0 2px; }
+.aoe4cp-pool:empty { display: none; }
+.aoe4cp-pool-label { flex: 0 0 100%; color: #aeb8c5; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.aoe4cp-pool-flag { display: inline-flex; align-items: center; padding: 1px; background: #343b46; border-radius: 4px; }
+.aoe4cp-pool-flag img { display: block; height: 26px; width: auto; max-width: 44px; object-fit: contain; border-radius: 3px; }
+.aoe4cp-pool-flag.aoe4cp-pool-text { padding: 2px 6px; color: #f7f7f7; font: 600 11px/1.2 system-ui, sans-serif; }
+html.aoe4cp-off-pools .aoe4cp-pool { display: none !important; }
+.aoe4cp-map-chip.aoe4cp-map-latest { border-color: #f5d37a; }
+
+.aoe4cp-flag { user-select: none; }
+.aoe4cp-tip { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid #3b424d; color: #8d98a7; font-size: 11px; line-height: 1.35; }
