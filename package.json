@@ -1,6 +1,6 @@
 {
   "name": "aoe4-counter-pick",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Browser extension (Firefox, Chrome, Edge, Brave…) that shows AoE4 counter picks and draft win-rate estimates on aoe2cm.net drafts.",
   "private": true,
   "type": "module",

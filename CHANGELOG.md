@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.1
+- **Fix: the civ picker started its own pool again** and replaced the saved Host/Guest pool of the civ draft. The picker is now recognised by snipes (class or visible snipe/steal marker), by "picker" or "snipe" in its title, or – if snipes are drawn like bans – by all its civ picks coming from the saved pool. A draft builds the pool when civs are banned in it or its title contains "civ" and "draft" (so "Civ + Map Draft" works too).
+- "Copy debug info" now also lists visible markers per panel, the draft title and whether the draft counts as the pool source.
+
 ## 0.8.0
 - **Fix: maps and civs in one draft.** A map picked in the same draft as the civs was read as a civ pick, which emptied the counter panels (a map has no matchup data). Picks are now classified as civ or map by their flag image (civ flags are under `/flag/`, map images under `/maps/`), falling back to the known civ names. Only civs feed the counters, the win-rate bar and the pools; maps go to the map bar.
 - **Shift+click** on the civ flags toggles several civs on and off; a plain click still selects only one civ (click it again to show all). The panels end with a tip that explains this.

@@ -639,13 +639,22 @@
     clearTimeout(poolsTimer);
     poolsTimer = setTimeout(() => { api.storage.local.set({ [POOLS_KEY]: poolsDb }).catch(() => {}); }, 400);
   }
-  // A draft builds the pool when civs are banned in it (pick/ban phase) or when its title says "civ draft".
-  // The civ picker that follows has neither, so it shows the saved pool instead of building its own.
+  // Which draft builds the civ pool? The civ pick/ban draft, never the civ picker that follows it.
+  // The picker is recognised by (1) snipes in it, (2) "picker"/"snipe" in its title, or (3) – in case snipes
+  // look like bans on the page – by its civ picks all coming from the pool saved earlier.
+  // Otherwise a draft is the source when civs are banned in it or its title mentions "civ" and "draft".
   function isPoolSource() {
-    const obs = Object.values(draftsDb[currentDraftId()]?.obs || {});
-    if (obs.some(o => o.action === 'ban' && optionKind(o.name, o.img) === 'civ')) return true;
+    const id = currentDraftId();
+    const obs = Object.values(draftsDb[id]?.obs || {});
     const title = draftTitle();
-    return /civ(?:ilization)?s?\W*draft/i.test(title) && !/picker/i.test(title);
+    if (obs.some(o => o.action === 'snipe') || /picker|snipe/i.test(title)) return false;
+    const civBans = obs.some(o => o.action === 'ban' && optionKind(o.name, o.img) === 'civ');
+    if (civBans && poolsDb && poolsDb.draftId !== id) {
+      const saved = new Set([...poolsDb.host, ...poolsDb.guest].map(c => civKey(c.name)));
+      const picks = obs.filter(o => o.action === 'pick' && (o.side === 'host' || o.side === 'guest') && optionKind(o.name, o.img) === 'civ');
+      if (picks.length >= 4 && picks.every(o => saved.has(civKey(o.name)))) return false;
+    }
+    return civBans || (/civ/i.test(title) && /draft/i.test(title));
   }
   function rememberPools(pools) {
     if (!pools.host.length && !pools.guest.length) return;
@@ -709,7 +718,8 @@
       if (!name || /^random/i.test(name)) continue;
       const side = el.closest('#player-host') ? 'host' : el.closest('#player-guest') ? 'guest' : 'admin';
       const cl = el.classList;
-      const action = cl.contains('ban') ? 'ban' : (cl.contains('steal') || cl.contains('snipe')) ? 'snipe' : 'pick';
+      const sniped = cl.contains('steal') || cl.contains('snipe') || !!el.querySelector('.snipe-marker:not(.is-hidden), .steal-marker:not(.is-hidden)');
+      const action = sniped ? 'snipe' : cl.contains('ban') ? 'ban' : 'pick';
       const img = imageFromPanel(el);
       found.push({ turn, side, action, name, img: img ? absoluteUrl(img) : null });
     }
@@ -823,10 +833,12 @@
       draftId: currentDraftId(),
       panels: [...document.querySelectorAll('.civ-panel[id^="panel-turn-"]')].map(el => ({
         id: el.id, classes: [...el.classList].join(' '), filled: el.classList.contains('has-value'),
+        visibleMarkers: [...el.querySelectorAll('[class*="marker"]:not(.is-hidden)')].map(m => [...m.classList].join(' ')),
         text: (el.querySelector('.stretchy-text')?.textContent || '').replace(/\s+/g, ' ').trim(), parents: chain(el),
       })),
       headings: [...document.querySelectorAll('.sub-heading, h1, h2, h3')].slice(0, 20).map(h => `${h.tagName.toLowerCase()}${h.id ? '#' + h.id : ''}: ${h.textContent.replace(/\s+/g, ' ').trim().slice(0, 60)}`),
       countersUse: { host: detectedHostPicks, guest: detectedGuestPicks },
+      title: draftTitle(),
       poolSource: isPoolSource(),
       savedPool: poolsDb ? { draftId: poolsDb.draftId, title: poolsDb.title, host: poolsDb.host.map(c => c.name), guest: poolsDb.guest.map(c => c.name) } : null,
       derived: deriveDraft(),
