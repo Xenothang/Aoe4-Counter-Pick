@@ -22,11 +22,11 @@ While a draft is running it reads the picks of both captains and shows the best 
 
 ## Install
 
-### From a release (recommended while the store listings do not exist)
+### Firefox
 
-Download the zip for your browser from the [Releases](../../releases) page.
+**[Get it on Firefox Add-ons](https://addons.mozilla.org/firefox/addon/aoe4-counter-pick-for-aoe2cm/)** and click *Add to Firefox*. It is signed by Mozilla and updates automatically.
 
-**Firefox** (temporary, until the add-on is signed/published): open `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on…* → pick `manifest.json` from the unzipped folder (or the zip itself). Temporary add-ons are removed when Firefox restarts.
+> If no matchup data loads after installing, open `about:addons` → *AoE4 Counter Pick for AoE2CM* → *Permissions* and make sure access to `aoe4world.com` is allowed. The extension needs it to download the win-rate statistics.
 
 **!!!Please set the Website Language to English!!!**
 
